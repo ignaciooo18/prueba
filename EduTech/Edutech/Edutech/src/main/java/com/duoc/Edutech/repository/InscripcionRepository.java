@@ -8,5 +8,5 @@ import com.duoc.Edutech.model.Inscripcion;
 @Repository
 public interface InscripcionRepository extends JpaRepository <Inscripcion,Integer> {
 
-    public Inscripcion findByRutEstudiante(String rut);
+    public Inscripcion findByRut(String rut);
 }

@@ -9,9 +9,10 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.util.Random;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/api/Cupon")
+@RequestMapping("/api/v1/Cupon")
 public class CuponController {
 
     @Autowired
@@ -20,37 +21,26 @@ public class CuponController {
     private CuponRepository cuponRepository;
 
     @PostMapping("/crearCupon")
-public ResponseEntity<Cupon> crearCupon(@RequestBody Cupon cupon) {
-
-    LocalDate fechaVencimiento = LocalDate.now().plusDays(5);
-    cupon.setFecha_vencimiento(fechaVencimiento);
-
-    String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    StringBuilder codigoBuilder = new StringBuilder();
-    Random random = new Random();
-    
-    for (int i = 0; i < 6; i++) {
-        codigoBuilder.append(caracteres.charAt(random.nextInt(caracteres.length())));
-    }
-    cupon.setCodigo(codigoBuilder.toString());
-
-    if (fechaVencimiento.isAfter(LocalDate.now())) {
-        cupon.setEstado("vigente");
-    } else {
-        cupon.setEstado("vencido");
+    public ResponseEntity<Cupon> crearCupon(@RequestBody Cupon cupon) {
+        return ResponseEntity.ok(cuponServices.crearCupon(cupon));
     }
 
-    return ResponseEntity.ok(cuponServices.save(cupon));
-}
+    @GetMapping("/buscarporid/{idCupon}")
+    public ResponseEntity<?> buscarporid(@PathVariable Integer idCupon) {
+        Map<String, Object> resultado = cuponServices.findByIdConpago(idCupon);
+        if (resultado.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(resultado);
+    }
 
-@DeleteMapping("/borrarCupon/{idCupon}")
+    @DeleteMapping("/borrarCupon/{idCupon}")
     public ResponseEntity<?> deleteById(@PathVariable Integer idCupon) {
-    return cuponServices.findById(idCupon).map(cupon -> {
-        cuponServices.deleteById(idCupon);
-        return ResponseEntity.ok("Cupon eliminado con éxito");
-    }).orElseGet(() -> {
-        return ResponseEntity.notFound().build();
-    });
+        return cuponServices.findById(idCupon).map(cupon -> {
+            cuponServices.deleteById(idCupon);
+            return ResponseEntity.ok("Cupon eliminado con éxito");
+        }).orElseGet(() -> {
+            return ResponseEntity.notFound().build();
+        });
     }
-
 }

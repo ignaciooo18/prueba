@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/Inscripcion")
+@RequestMapping("/api/v1/Inscripcion")
 public class InscripcionController {
     @Autowired
     private InscripcionServices inscripcionServices;
