@@ -26,9 +26,6 @@ private Integer idcupon;
 private String codigo;
 
 @Column(nullable = false)
-private char tipoDescuento;
-
-@Column(nullable = false)
 private Integer descuento;
 
 @Column (nullable = false)

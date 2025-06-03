@@ -27,11 +27,17 @@ public class InscripcionServices {
         }
         return inscripcionExistente;
     }
+    public Inscripcion findById(Integer idInscripcion) {
+        return inscripcionRepository.findById(idInscripcion).orElse(null);
+    }
+    public Inscripcion findByRutEstudiante(String rut) {
+        return inscripcionRepository.findByRut(rut);
+    }
 
     public String buscarporrut(String rut) {
         String alumnourl = "http://localhost:8082/api/v1/estudiantes/"+rut;
         String alumnodata = restTemplate.getForObject(alumnourl, String.class);
-        Inscripcion inscripcion = inscripcionRepository.findByRutEstudiante(rut);
+        Inscripcion inscripcion = inscripcionRepository.findByRut(rut);
         if (inscripcion == null) {
             return "No se encontro inscripcion para el alumno con RUN: " + rut;
         }else{
